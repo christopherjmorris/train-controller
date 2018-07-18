@@ -1,6 +1,7 @@
 #include <util/atomic.h>
 #include "Controller.h"
 #include "MotorOutput.h"
+#include "VisualOutput.h"
 
 volatile byte seqA = 0;
 volatile byte seqB = 0;
@@ -16,6 +17,7 @@ const int PIN_DIRECTION_B = 8;
 
 Controller controller;
 MotorOutput motor_output (PIN_PWM_OUTPUT);
+VisualOutput visual_output (5, 4);
 
 void setup() {
   pinMode(A0, INPUT);
@@ -52,7 +54,9 @@ void loop() {
 
   controller.update(lefts, rights, button_pressed);
 
-  motor_output.update(controller.get_speed());
+  unsigned char currentSpeed = controller.get_speed();
+  motor_output.update(currentSpeed);
+  visual_output.update(currentSpeed);
 }
 
 ISR (PCINT1_vect) {
