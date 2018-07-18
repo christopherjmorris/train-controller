@@ -1,13 +1,21 @@
+#include <util/atomic.h>
+#include "Controller.h"
+#include "MotorOutput.h"
+
 volatile byte seqA = 0;
 volatile byte seqB = 0;
-volatile byte cnt1 = 0;
-volatile byte cnt2 = 0;
-volatile boolean right = false;
-volatile boolean left = false;
+
+volatile byte turnsLeft = 0;
+volatile byte turnsRight = 0;
+
 volatile boolean button = false;
 
-byte outputLevel = 0;
-const int PIN_OUTPUT = 6;
+const int PIN_PWM_OUTPUT = 6;
+const int PIN_DIRECTION_A = 7;
+const int PIN_DIRECTION_B = 8;
+
+Controller controller;
+MotorOutput motor_output (PIN_PWM_OUTPUT);
 
 void setup() {
   pinMode(A0, INPUT);
@@ -22,28 +30,29 @@ void setup() {
   PCICR =  0b00000010; // 1. PCIE1: Pin Change Interrupt Enable 1
   PCMSK1 = 0b00000111; // Enable Pin Change Interrupt for A0, A1, A2
   
-  pinMode(PIN_OUTPUT, OUTPUT);
+  pinMode(PIN_PWM_OUTPUT, OUTPUT);
 }
 
 void loop() {
-  // Take action if a new command received from the encoder
-  if (left) {
-    left = false;
-
-    if (0 < outputLevel) {
-      outputLevel--;
-    }
+  
+  byte lefts;
+  byte rights;
+  bool button_pressed;
+  
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
+    lefts  = turnsLeft;
+    rights = turnsRight;
+    button_pressed = button;
+    
+    turnsLeft = 0;
+    turnsRight = 0;
+    button = false;
   }
 
-  if (right) {
-    right = false;
+  controller.update(lefts, rights, button_pressed);
 
-    if (outputLevel < 255) {
-      outputLevel++;
-    }
-  }
-
-  analogWrite(PIN_OUTPUT, outputLevel);
+  motor_output.update(controller.get_speed());
 }
 
 ISR (PCINT1_vect) {
@@ -70,13 +79,11 @@ ISR (PCINT1_vect) {
     
     // Compare the recorded sequence with the expected sequence
     if (seqA == 0b00001001 && seqB == 0b00000011) {
-      cnt1++;
-      left = true;
+      turnsLeft++;
     }
     
     if (seqA == 0b00000011 && seqB == 0b00001001) {
-      cnt2++;
-      right = true;
+      turnsRight++;
     }
   }
 }
