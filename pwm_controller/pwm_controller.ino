@@ -23,7 +23,7 @@ void setup() {
   pinMode(A2, INPUT);
   
   // Enable internal pull-up resistors
-  digitalWrite(A0, HIGH);
+  //digitalWrite(A0, HIGH);
   digitalWrite(A1, HIGH);
   digitalWrite(A2, HIGH);
   
@@ -56,7 +56,8 @@ void loop() {
 }
 
 ISR (PCINT1_vect) {
-  if (!digitalRead(A0)) {
+  // button press pulls the input high
+  if (digitalRead(A0)) {
     // If interrupt is triggered by the button
     button = true;
   } else {
