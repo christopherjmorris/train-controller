@@ -3,6 +3,7 @@
 
 #include "ControllerState.h"
 
+const unsigned char MIN_SPEED_SETTING = 90;
 class Controller {
   
   public:
@@ -12,7 +13,7 @@ class Controller {
   private:
 
   int controlState;
-  unsigned char currentSpeed;
+  unsigned char currentSpeed = MIN_SPEED_SETTING;
 };
 
 #endif

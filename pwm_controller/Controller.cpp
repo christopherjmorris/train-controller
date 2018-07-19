@@ -8,7 +8,7 @@ ControllerState Controller::update (unsigned char lefts, unsigned char rights, b
   if (button_pressed) {
     
     controlState = STOPPED;
-    currentSpeed = 0;
+    currentSpeed = MIN_SPEED_SETTING;
     
   } else {
 
