@@ -1,41 +1,64 @@
 #include "Controller.h"
-const int STOPPED = 0;
-const int DRIVING = 1;
 
-ControllerState Controller::update (unsigned char lefts, unsigned char rights, bool button_pressed) {
-
-  // Take action if a new command received from the encoder
-  if (button_pressed) {
-    
-    controlState = STOPPED;
+void Controller::updateStateStopped (unsigned char lefts, unsigned char rights, bool button_pressed) {
+  if (0 < lefts) {
     currentSpeed = MIN_SPEED_SETTING;
-    
-  } else {
+    controlState = STATE_DRIVING_A;
+  } else if  (0 < rights) {
+    currentSpeed = MIN_SPEED_SETTING;
+    controlState = STATE_DRIVING_B;
+  }
+}
 
-    if (lefts > 0) {
-      controlState = DRIVING;
-      
-      if (0 < currentSpeed) {
-        currentSpeed--;
-      }
-    }
-    
-    if (rights > 0) {
-      controlState = DRIVING;
-      
-      if (currentSpeed < 255) {
-        currentSpeed++;
-      }
-    }
+void Controller::updateStateDrivingDirectionA (unsigned char lefts, unsigned char rights, bool button_pressed) {
+  
+  if (button_pressed) {
+    controlState = STATE_STOPPED;
+    return;
   }
 
+  currentSpeed += lefts;
+  currentSpeed -= rights;
+  
+  if (currentSpeed < MIN_SPEED_SETTING) {
+    currentSpeed = MIN_SPEED_SETTING;
+  }
+  if (MAX_SPEED_SETTING < currentSpeed) {
+    currentSpeed = MAX_SPEED_SETTING;
+  }
+}
+
+void Controller::updateStateDrivingDirectionB (unsigned char lefts, unsigned char rights, bool button_pressed) {
+  
+  if (button_pressed) {
+    controlState = STATE_STOPPED;
+    return;
+  }
+
+  currentSpeed += rights;
+  currentSpeed -= lefts;
+  
+  if (currentSpeed < MIN_SPEED_SETTING) {
+    currentSpeed = MIN_SPEED_SETTING;
+  }
+  if (MAX_SPEED_SETTING < currentSpeed) {
+    currentSpeed = MAX_SPEED_SETTING;
+  }
+}
+
+ControllerState Controller::getState() {
+  
   ControllerState state;
-  if (controlState == STOPPED) {
-    state.direction = 0;
-    state.speed = 0;
-  } else {
-    state.direction = 1;
+  
+  if (controlState == STATE_DRIVING_A)  {
+    state.direction = DIRECTION_A;
     state.speed = currentSpeed;
+  } else if (controlState == STATE_DRIVING_B) {
+    state.direction = DIRECTION_B;
+    state.speed = currentSpeed;
+  } else {
+    state.direction = DIRECTION_STOPPED;
+    state.speed = 0;
   }
   
   return state;

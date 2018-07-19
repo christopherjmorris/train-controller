@@ -16,7 +16,7 @@ VisualOutput::VisualOutput(int pinGreen, int pinRed) {
 }
 
 void VisualOutput::update(ControllerState state) {
-  if (state.direction == 0) {
+  if (state.direction == DIRECTION_STOPPED) {
     digitalWrite(pinGreen, HIGH);
     digitalWrite(pinRed, LOW);
   } else {

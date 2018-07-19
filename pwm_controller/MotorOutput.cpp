@@ -17,11 +17,27 @@ MotorOutput::MotorOutput(int pinPwm, int pinDirectionA, int pinDirectionB) {
   pinMode(pinDirectionB, OUTPUT);
 
   analogWrite(pinPwm, 0);
-  digitalWrite(pinDirectionA, HIGH);
+  digitalWrite(pinDirectionA, LOW);
   digitalWrite(pinDirectionB, LOW);
 }
 
 void MotorOutput::update(ControllerState state) {
-  analogWrite(pinPwm, state.speed);
+  switch (state.direction) {
+    case DIRECTION_STOPPED:
+      digitalWrite(pinDirectionA, LOW);
+      digitalWrite(pinDirectionB, LOW);
+      analogWrite(pinPwm, 0);
+      break;
+    case DIRECTION_A:
+      digitalWrite(pinDirectionB, LOW);
+      digitalWrite(pinDirectionA, HIGH);
+      analogWrite(pinPwm, state.speed);
+      break;
+     case DIRECTION_B:
+      digitalWrite(pinDirectionA, LOW);
+      digitalWrite(pinDirectionB, HIGH);
+      analogWrite(pinPwm, state.speed);
+      break;
+  }
 }
 
