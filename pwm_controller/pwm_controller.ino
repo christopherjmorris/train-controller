@@ -13,7 +13,7 @@ volatile boolean button = false;
 
 const int PIN_PWM_OUTPUT = 6;
 const int PIN_DIRECTION_A = 12;
-const int PIN_DIRECTION_B = 13;
+const int PIN_DIRECTION_B = 11;
 
 Controller controller;
 MotorOutput motor_output (PIN_PWM_OUTPUT, PIN_DIRECTION_A, PIN_DIRECTION_B);
