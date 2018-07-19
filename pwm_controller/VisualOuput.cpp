@@ -15,8 +15,8 @@ VisualOutput::VisualOutput(int pinGreen, int pinRed) {
   pinMode(pinRed, OUTPUT);
 }
 
-void VisualOutput::update(unsigned char currentSpeed) {
-  if (currentSpeed == 0) {
+void VisualOutput::update(ControllerState state) {
+  if (state.direction == 0) {
     digitalWrite(pinGreen, HIGH);
     digitalWrite(pinRed, LOW);
   } else {

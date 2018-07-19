@@ -12,11 +12,11 @@ volatile byte turnsRight = 0;
 volatile boolean button = false;
 
 const int PIN_PWM_OUTPUT = 6;
-const int PIN_DIRECTION_A = 7;
-const int PIN_DIRECTION_B = 8;
+const int PIN_DIRECTION_A = 12;
+const int PIN_DIRECTION_B = 13;
 
 Controller controller;
-MotorOutput motor_output (PIN_PWM_OUTPUT);
+MotorOutput motor_output (PIN_PWM_OUTPUT, PIN_DIRECTION_A, PIN_DIRECTION_B);
 VisualOutput visual_output (5, 4);
 
 void setup() {
@@ -31,8 +31,6 @@ void setup() {
   
   PCICR =  0b00000010; // 1. PCIE1: Pin Change Interrupt Enable 1
   PCMSK1 = 0b00000111; // Enable Pin Change Interrupt for A0, A1, A2
-  
-  pinMode(PIN_PWM_OUTPUT, OUTPUT);
 }
 
 void loop() {
@@ -52,11 +50,9 @@ void loop() {
     button = false;
   }
 
-  controller.update(lefts, rights, button_pressed);
-
-  unsigned char currentSpeed = controller.get_speed();
-  motor_output.update(currentSpeed);
-  visual_output.update(currentSpeed);
+  ControllerState state = controller.update(lefts, rights, button_pressed);
+  motor_output.update(state);
+  visual_output.update(state);
 }
 
 ISR (PCINT1_vect) {

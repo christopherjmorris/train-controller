@@ -1,15 +1,17 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include "ControllerState.h"
+
 class Controller {
   
   public:
 
-  void update (unsigned char lefts, unsigned char rights, bool button_pressed);
-  unsigned char get_speed (void);
+  ControllerState update (unsigned char lefts, unsigned char rights, bool button_pressed);
 
   private:
 
+  int controlState;
   unsigned char currentSpeed;
 };
 

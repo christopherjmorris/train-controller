@@ -1,16 +1,19 @@
 #ifndef MOTOROUTPUT_H
 #define MOTOROUTPUT_H
 
+#include "ControllerState.h"
 class MotorOutput {
     
   public:
   
-  MotorOutput(int pinOut);
-  void update(unsigned char currentSpeed);
+  MotorOutput(int pinPwm, int pinDirectionA, int pinDirectionB);
+  void update(ControllerState state);
   
   private:
   
-  int pinOutput;
+  int pinPwm;
+  int pinDirectionA;
+  int pinDirectionB;
 };
 
 #endif
