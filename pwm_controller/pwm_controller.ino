@@ -2,6 +2,7 @@
 #include "Controller.h"
 #include "MotorOutput.h"
 #include "VisualOutput.h"
+#include "SpeedVisualiser.h"
 
 volatile byte seqA = 0;
 volatile byte seqB = 0;
@@ -19,6 +20,7 @@ Encoder encoder(A1, A2);
 Controller controller;
 MotorOutput motor_output (PIN_PWM_OUTPUT, PIN_DIRECTION_A, PIN_DIRECTION_B);
 VisualOutput visual_output (5, 4);
+SpeedVisualiser speed_output (3);
 
 void setup() {
   pinMode(A0, INPUT);
@@ -42,6 +44,7 @@ void loop() {
   
   motor_output.update(state);
   visual_output.update(state);
+  speed_output.update(state);
 }
 
 ISR (PCINT1_vect) {
