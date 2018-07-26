@@ -28,12 +28,12 @@ void MotorOutput::update(ControllerState state) {
       digitalWrite(pinDirectionB, LOW);
       analogWrite(pinPwm, 0);
       break;
-    case DIRECTION_A:
+    case DIRECTION_LEFT:
       digitalWrite(pinDirectionB, LOW);
       digitalWrite(pinDirectionA, HIGH);
       analogWrite(pinPwm, state.speed);
       break;
-     case DIRECTION_B:
+     case DIRECTION_RIGHT:
       digitalWrite(pinDirectionA, LOW);
       digitalWrite(pinDirectionB, HIGH);
       analogWrite(pinPwm, state.speed);

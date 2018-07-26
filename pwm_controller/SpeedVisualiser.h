@@ -20,7 +20,7 @@ class SpeedVisualiser {
       return;
     }
 
-    ShowPartialGreen(state.speed, state.direction == DIRECTION_A);
+    ShowPartialGreen(state.speed, state.direction == DIRECTION_LEFT);
   }
   
   private:
@@ -34,12 +34,12 @@ class SpeedVisualiser {
   
   void ShowRedRing() {
     for (int index = 0; index < strip.numPixels(); index++) {
-      strip.setPixelColor(index, 64, 0, 0, 0);
+      strip.setPixelColor(index, 32, 0, 0, 0);
     }
     strip.show();
   }
 
-  void ShowPartialGreen(unsigned char speed, boolean isDirectionA) {
+  void ShowPartialGreen(unsigned char speed, boolean isDirectionLeft) {
 
     // Convert speed to intensities
     unsigned char intensities [8] = {};
@@ -64,7 +64,7 @@ class SpeedVisualiser {
     strip.setPixelColor(11, 0, 0, 0, 0);
     
     for (int index = 0; index < 8; index++) {
-      int pixelIndex = isDirectionA ? index + 2 : 9 - index;      
+      int pixelIndex = isDirectionLeft ? 9 - index : index + 2; // If direction == left, start from the right and go left-wards
       strip.setPixelColor(pixelIndex, 0, intensities[index] >> 2, 0, 0);
     }
     

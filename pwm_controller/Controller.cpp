@@ -51,10 +51,10 @@ ControllerState Controller::getState() {
   ControllerState state;
   
   if (controlState == STATE_DRIVING_A)  {
-    state.direction = DIRECTION_A;
+    state.direction = DIRECTION_LEFT;
     state.speed = currentSpeed;
   } else if (controlState == STATE_DRIVING_B) {
-    state.direction = DIRECTION_B;
+    state.direction = DIRECTION_RIGHT;
     state.speed = currentSpeed;
   } else {
     state.direction = DIRECTION_STOPPED;
