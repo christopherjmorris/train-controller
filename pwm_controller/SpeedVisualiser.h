@@ -19,8 +19,8 @@ class SpeedVisualiser {
       ShowRedRing();
       return;
     }
-    
-    ShowPartialGreen(state.speed);
+
+    ShowPartialGreen(state.speed, state.direction == DIRECTION_A);
   }
   
   private:
@@ -39,22 +39,33 @@ class SpeedVisualiser {
     strip.show();
   }
 
-  void ShowPartialGreen(unsigned char speed) {
-    unsigned char speedMsb = speed >> 5;
-    unsigned char speedLower = (speed & 0b00011111) << 1;
-    int index;
-    for (index = 0; index < 8; index++) {
-      if (index < speedMsb) {
-        strip.setPixelColor(index, 0, 64, 0, 0);
-      } else if (index == speedMsb) {
-        strip.setPixelColor(index, 0, speedLower, 0, 0);
-      }
-      else {
-        strip.setPixelColor(index, 0, 0, 0, 0);
+  void ShowPartialGreen(unsigned char speed, boolean isDirectionA) {
+
+    // Convert speed to intensities
+    unsigned char intensities [8] = {};
+    
+    unsigned char speedHigher = speed >> 5; // Top three bits in the range 0-7
+    unsigned char speedLower = (speed & 0b00011111) << 3; // lower 5 bits in the range 0-255
+    
+    for (int index = 0; index < 8; index++) {
+      if (index < speedHigher) {
+        intensities[index] = 255;
+      } else if (index == speedHigher) {
+        intensities[index] = speedLower;
+      } else {
+        intensities[index] = 0;
       }
     }
-    for (; index < strip.numPixels(); index++) {
-      strip.setPixelColor(index, 0, 0, 0, 0);
+
+    // Control NeoPixel
+    strip.setPixelColor(0, 0, 0, 0, 0);
+    strip.setPixelColor(1, 0, 0, 0, 0);
+    strip.setPixelColor(10, 0, 0, 0, 0);
+    strip.setPixelColor(11, 0, 0, 0, 0);
+    
+    for (int index = 0; index < 8; index++) {
+      int pixelIndex = isDirectionA ? index + 2 : 9 - index;      
+      strip.setPixelColor(pixelIndex, 0, intensities[index] >> 2, 0, 0);
     }
     
     strip.show();
