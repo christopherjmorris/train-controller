@@ -65,11 +65,20 @@ class SpeedVisualiser {
     
     for (int index = 0; index < 8; index++) {
       int pixelIndex = isDirectionLeft ? 9 - index : index + 2; // If direction == left, start from the right and go left-wards
-      strip.setPixelColor(pixelIndex, 0, intensities[index] >> 2, 0, 0);
+      int rgb [3] = {};
+      IntensityToRgb(index, intensities[index], rgb);
+      strip.setPixelColor(pixelIndex, rgb[0], rgb[1], rgb[2], 0);
     }
     
     strip.show();
   }
+
+  void IntensityToRgb(int index, unsigned char intensity, int rgb[]) {
+    rgb[0] = (3 < index) ? intensity >> 2 : 0;
+    rgb[1] = (index < 6) ? intensity >> 2 : 0;
+    rgb[2] = 0;
+  }
+  
   
   Adafruit_NeoPixel strip;
 };
