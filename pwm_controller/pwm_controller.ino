@@ -4,14 +4,6 @@
 #include "VisualOutput.h"
 #include "SpeedVisualiser.h"
 
-volatile byte seqA = 0;
-volatile byte seqB = 0;
-
-volatile byte turnsLeft = 0;
-volatile byte turnsRight = 0;
-
-volatile boolean button = false;
-
 const int PIN_PWM_OUTPUT = 6;
 const int PIN_DIRECTION_A = 12;
 const int PIN_DIRECTION_B = 11;
