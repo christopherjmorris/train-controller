@@ -43,9 +43,11 @@ class SpeedVisualiser {
 
     // Convert speed to intensities
     unsigned char intensities [8] = {};
+
+    // Max speed value is 32:
     
-    unsigned char speedHigher = speed >> 5; // Top three bits in the range 0-7
-    unsigned char speedLower = (speed & 0b00011111) << 3; // lower 5 bits in the range 0-255
+    unsigned char speedHigher = (speed & 0b00111100) >> 2; // bits 3,4,5 in range 0-7. Include bit 6 to account for top speed of 32
+    unsigned char speedLower = (speed & 0b00000011) << 6; // bits 1&2 in range 0-255
     
     for (int index = 0; index < 8; index++) {
       if (index < speedHigher) {

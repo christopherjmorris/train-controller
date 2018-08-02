@@ -2,10 +2,10 @@
 
 void Controller::updateStateStopped (unsigned char lefts, unsigned char rights, bool button_pressed) {
   if (0 < lefts) {
-    currentSpeed = MIN_SPEED_SETTING;
+    currentSpeed = lefts;
     controlState = STATE_DRIVING_A;
   } else if  (0 < rights) {
-    currentSpeed = MIN_SPEED_SETTING;
+    currentSpeed = rights;
     controlState = STATE_DRIVING_B;
   }
 }
@@ -20,8 +20,8 @@ void Controller::updateStateDrivingDirectionA (unsigned char lefts, unsigned cha
   currentSpeed += lefts;
   currentSpeed -= rights;
   
-  if (currentSpeed < MIN_SPEED_SETTING) {
-    currentSpeed = MIN_SPEED_SETTING;
+  if (currentSpeed < 0) {
+    currentSpeed = 0;
   }
   if (MAX_SPEED_SETTING < currentSpeed) {
     currentSpeed = MAX_SPEED_SETTING;
@@ -38,8 +38,8 @@ void Controller::updateStateDrivingDirectionB (unsigned char lefts, unsigned cha
   currentSpeed += rights;
   currentSpeed -= lefts;
   
-  if (currentSpeed < MIN_SPEED_SETTING) {
-    currentSpeed = MIN_SPEED_SETTING;
+  if (currentSpeed < 0) {
+    currentSpeed = 0;
   }
   if (MAX_SPEED_SETTING < currentSpeed) {
     currentSpeed = MAX_SPEED_SETTING;

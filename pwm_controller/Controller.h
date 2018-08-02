@@ -3,8 +3,7 @@
 
 #include "ControllerState.h"
 
-const unsigned char MIN_SPEED_SETTING = 90;
-const unsigned char MAX_SPEED_SETTING = 255;
+const unsigned char MAX_SPEED_SETTING = 32;
 
 const int STATE_STOPPED = 0;
 const int STATE_DRIVING_A = 1;
@@ -40,7 +39,7 @@ class Controller {
   ControllerState getState();
   
   int controlState;
-  unsigned char currentSpeed = MIN_SPEED_SETTING;
+  int currentSpeed = 0;
 };
 
 #endif
